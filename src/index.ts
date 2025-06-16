@@ -23,8 +23,6 @@ app.use(
 app.use(cookieParser());
 // app.use(verifyToken)
 
-console.log("MIDTRANS SERVER KEY", process.env.MID_SERVER_KEY);
-
 app.get("/api", (req: Request, res: Response) => {
   res.status(200).send("Hello from server");
 });
