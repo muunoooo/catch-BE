@@ -9,19 +9,18 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const routes_1 = require("./routers/routes");
-const PORT = 8001;
+const PORT = parseInt(process.env.PORT || "8001", 10);
 const app = (0, express_1.default)();
-app.use(express_1.default.json());
-app.use((0, cors_1.default)({
-    origin: `${process.env.BASE_URL_FE}`,
+// ✅ CORS setup
+const corsOptions = {
+    origin: process.env.BASE_URL_FE || "http://localhost:3000",
     credentials: true,
-}));
-// app.use(cors({
-//     origin: "*",
-//     credentials: true
-// }));
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+};
+app.use((0, cors_1.default)(corsOptions));
+app.options("*", (0, cors_1.default)(corsOptions));
+app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
-// app.use(verifyToken)
 app.get("/api", (req, res) => {
     res.status(200).send("Hello from server");
 });

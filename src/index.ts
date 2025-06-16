@@ -4,24 +4,23 @@ import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { ListRouter } from "./routers/routes";
-import { verifyToken } from "./middlewares/verify";
 
-const PORT: number = 8001;
-
+const PORT: number = parseInt(process.env.PORT || "8001", 10);
 const app: Application = express();
+
+// ✅ CORS setup
+const corsOptions = {
+  origin: process.env.BASE_URL_FE || "http://localhost:3000",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); 
+
 app.use(express.json());
-app.use(
-  cors({
-    origin: `${process.env.BASE_URL_FE}`,
-    credentials: true,
-  })
-);
-// app.use(cors({
-//     origin: "*",
-//     credentials: true
-// }));
 app.use(cookieParser());
-// app.use(verifyToken)
+
 
 app.get("/api", (req: Request, res: Response) => {
   res.status(200).send("Hello from server");
